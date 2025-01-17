@@ -1,5 +1,5 @@
 import time
-
+import getpass
 from apis import LoginManager
 
 
@@ -23,8 +23,8 @@ def always_login(username, password, checkinterval):
 
 
 if __name__ == "__main__":
-    username = "your username"
-    password = "your password"
+    username = "421542"
+    password = getpass.getpass("Please enter your password (will not show): ")
     checkinterval = 5 * 60
 
     always_login(username, password, checkinterval)
