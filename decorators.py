@@ -1,4 +1,5 @@
 from functools import wraps
+from utils import LoginLogger
 
 def checkvars(varlist, errorinfo):
 	"""
@@ -20,6 +21,7 @@ def infomanage(callinfo=None, successinfo=None, errorinfo=None):
 	Decorator, print some info when begin, success, fail to execute a function
 	Doesn't block any exceptions
 	"""
+	logger = LoginLogger()
 	def decorator(func):
 		nonlocal callinfo, successinfo, errorinfo
 		if callinfo == None: callinfo = "Calling function " + func.__name__
@@ -27,13 +29,13 @@ def infomanage(callinfo=None, successinfo=None, errorinfo=None):
 		if errorinfo == None: errorinfo = "Failed to call function " + func.__name__
 		@wraps(func)
 		def wrapper(self, *args, **kwargs):
-			print(callinfo)
+			logger.info(callinfo)
 			try:
 				outputs = func(self, *args, **kwargs)
-				print(successinfo)
+				logger.info(successinfo)
 				return outputs
 			except Exception:
-				print(errorinfo)
+				logger.info(errorinfo)
 				# doesn't handle exception
 				raise
 		return wrapper

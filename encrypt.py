@@ -6,6 +6,7 @@
 
 import hashlib
 import hmac
+from utils import LoginLogger
 
 
 def get_md5(password, token):
@@ -15,15 +16,15 @@ def get_md5(password, token):
 def get_sha1(value):
     return hashlib.sha1(value.encode()).hexdigest()
 
-
 _PADCHAR = "="
 _ALPHA = "LVoJPiCN2R8G90yg+hmFHuacZ1OWMnrsSTXkYpUq/3dlbfKwv6xztjI7DeBE45QA"
 
 
 def _getbyte(s, i):
     x = ord(s[i])
+    logger = LoginLogger()
     if x > 255:
-        print("INVALID_CHARACTER_ERR: DOM Exception 5")
+        logger.error("INVALID_CHARACTER_ERR: DOM Exception 5")
         exit(0)
     return x
 
@@ -137,4 +138,5 @@ def get_xencode(msg, key):
 
 if __name__ == '__main__':
     r = get_base64("132456")
-    print(r)
+    logger = LoginLogger()
+    logger.info(r)

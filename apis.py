@@ -11,6 +11,7 @@ import requests
 
 from decorators import *
 from encrypt import get_md5, get_sha1, get_base64, get_xencode
+from apis import LoginLogger
 
 os.environ['no_proxy'] = 'https://net.szu.edu.cn/'
 header = {
@@ -39,6 +40,8 @@ class LoginManager:
         self.acid = acid
         self.enc = enc
 
+        self.logger = LoginLogger()
+
     def login(self, username, password):
         self.username = username
         self.password = password
@@ -48,26 +51,26 @@ class LoginManager:
         self.get_login_responce()
 
     def get_ip(self):
-        print("Step1: Get local ip returned from srun server.")
+        self.logger.info("Step1: Get local ip returned from srun server.")
         self._get_login_page()
         self._resolve_ip_from_login_page()
-        print("Current IP: " + self.ip)
-        print("----------------")
+        self.logger.info("Current IP: " + self.ip)
+        self.logger.info("----------------")
 
     def get_token(self):
-        print("Step2: Get token by resolving challenge result.")
+        self.logger.info("Step2: Get token by resolving challenge result.")
         self._get_challenge()
         self._resolve_token_from_challenge_response()
-        print("Current token: " + self.token)
-        print("----------------")
+        self.logger.info("Current token: " + self.token)
+        self.logger.info("----------------")
 
     def get_login_responce(self):
-        print("Step3: Loggin and resolve response.")
+        self.logger.info("Step3: Loggin and resolve response.")
         self._generate_encrypted_login_info()
         self._send_login_info()
         self._resolve_login_responce()
-        print("The loggin result is: " + self._login_result)
-        print("----------------")
+        self.logger.info("The loggin result is: " + self._login_result)
+        self.logger.info("----------------")
 
     def _is_defined(self, varname):
         """
